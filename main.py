@@ -33,6 +33,7 @@ if __name__ == "__main__":
     menu.add_action('1 Player')
     menu.add_action('2 Player')
     menu.add_action('Settings')
+    menu.add_action('Creators')
     menu.add_action('Exit', on_action=exit_game)
 
     while is_running:
