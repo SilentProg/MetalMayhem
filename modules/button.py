@@ -53,6 +53,7 @@ class Button(pygame.sprite.Sprite):
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] and self.pressed == 1:
                 self.command()
+                pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
                 self.pressed = 0
             if pygame.mouse.get_pressed() == (0, 0, 0):
                 self.pressed = 1
