@@ -16,8 +16,10 @@ def draw_grid():
         pygame.draw.line(screen, 'white', (0, c * STEP), (WIDTH, c * STEP))
 
 
-menu = Menu("Level Editor", (200, 500), title_size=30)
-menu.add_action("Save", on_action=lambda: print('no action'))
+buttons = pygame.sprite.Group()
+button_save = Button(text="Save", command=lambda: print('save'), pos=(WIDTH+10, HEIGHT-50), size=(180, 37))
+
+buttons.add(button_save)
 
 while is_running:
     for event in pygame.event.get():
@@ -27,6 +29,6 @@ while is_running:
             quit(0)
 
         draw_grid()
-        menu.update()
-        screen.blit(menu, (0, 0))
+        buttons.update()
+        buttons.draw(screen)
         pygame.display.flip()

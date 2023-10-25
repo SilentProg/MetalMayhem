@@ -143,14 +143,7 @@ class Tank(pygame.sprite.Sprite):
             angle = 270
         print(angle)
         self.__tank_weapon.rotate(angle)
-        if self.__tank_weapon.angle == 0:
-            self.__tank_weapon.rect.center = (self.tank_base.rect.centerx + 15, self.tank_base.rect.centery)
-        elif self.__tank_weapon.angle == 180:
-            self.__tank_weapon.rect.center = (self.tank_base.rect.centerx - 15, self.tank_base.rect.centery)
-        elif self.__tank_weapon.angle == 90:
-            self.__tank_weapon.rect.center = (self.tank_base.rect.centerx, self.tank_base.rect.centery - 15)
-        elif self.__tank_weapon.angle == 270:
-            self.__tank_weapon.rect.center = (self.tank_base.rect.centerx, self.tank_base.rect.centery + 15)
+        self.__tank_weapon.rect.center = self.tank_base.rect.center
 
     def rotate_base(self, angle):
         rotate = (360 - self.tank_base.angle + angle)
