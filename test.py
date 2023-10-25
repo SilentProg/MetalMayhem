@@ -10,12 +10,12 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Проверка коллизии между Rect")
 
 # Создание Rect на экране
-rect1 = pygame.Rect(160, 100, 50, 50)
+rect1 = pygame.Rect(0, 0, 50, 50)
 
 # Создание поверхности Surface и Rect на ней
-surface = pygame.Surface((200, 200))
+surface = pygame.Surface((100, 100))
 surface_rect = surface.get_rect()
-rect2 = pygame.Rect(160, 60, 50, 50)
+rect2 = pygame.Rect(40, 40, 50, 50)
 
 # Цвета
 white = (255, 255, 255)
@@ -39,7 +39,7 @@ while running:
         print("Коллизия обнаружена!")
 
     # Отображение поверхности на экране
-    screen.blit(surface, surface_rect)
+    screen.blit(surface, (60, 60))
 
     # Рисование Rect на экране
     pygame.draw.rect(screen, red, rect1)

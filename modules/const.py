@@ -7,7 +7,10 @@ PATH = os.path.abspath(__file__ + '/../..')
 # HEIGHT = 1080
 WIDTH = 1400
 HEIGHT = 800
+COLS = 28
+ROWS = 16
 SCREEN_SIZE = (WIDTH, HEIGHT)
+STEP = HEIGHT // ROWS
 WASD_PLAYER = {
     'weapon_rotate_r': pygame.K_e,
     'weapon_rotate_l': pygame.K_q,
