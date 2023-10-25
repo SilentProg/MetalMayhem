@@ -5,12 +5,12 @@ from modules.const import PATH
 
 
 class Menu(pygame.Surface):
-    def __init__(self, title="Menu", size=(500, 500)) -> None:
+    def __init__(self, title="Menu", size=(500, 500), title_size: int = 50) -> None:
         super().__init__(size)
         self.title = title
         self.actions = pygame.sprite.Group()
         self.size = size
-        self.font = pygame.font.Font(os.path.join(PATH, 'assets/fonts/PixelifySans-SemiBold.ttf'), 50)
+        self.font = pygame.font.Font(os.path.join(PATH, 'assets/fonts/PixelifySans-SemiBold.ttf'), title_size)
 
         self.background = pygame.image.load(os.path.join(PATH, 'assets/images/Background.png')).convert_alpha()
         self.background = pygame.transform.scale(self.background, self.size)
@@ -47,13 +47,16 @@ class Menu(pygame.Surface):
 
     def add_action(self, name='Action', on_action=lambda: print('No action')):
         action = Button(text=name, pos=(self.start_x, self.start_y),
-                        parent_pos=(self.__menu_rect.x, self.__menu_rect.y + 60), auto_size=False, size=(200, 50),
+                        parent_pos=(self.__menu_rect.x, self.__menu_rect.y+60), auto_size=False, size=(200, 50),
                         command=on_action)
         self.start_y += action.rect.h + 10
         self.actions.add(action)
 
     def update(self):
         self.blit(self.background, (0, 0))
+
+        mouse_pos = pygame.mouse.get_pos()
+
 
         self.__menu_surf: pygame.Surface = pygame.Surface(size=(220, len(self.actions.sprites())*65+60))
         self.__menu_rect = self.__menu_surf.get_rect(center=(self.get_rect().centerx, self.get_rect().centery))
@@ -71,7 +74,6 @@ class Menu(pygame.Surface):
 
         self.blit(self.__menu_surf, self.__menu_rect)
 
-        mouse_pos = pygame.mouse.get_pos()
         relative_pos = (mouse_pos[0] - self.__menu_rect.x, mouse_pos[1] - self.__menu_rect.y - 60)
         for action in self.actions:
             if action.rect.collidepoint(relative_pos):
@@ -79,6 +81,7 @@ class Menu(pygame.Surface):
                 break
             else:
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
         #
         # self.blit(self.background, (0, 0))
         #
