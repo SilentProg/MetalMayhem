@@ -173,38 +173,48 @@ class Tank(pygame.sprite.Sprite):
         if keys[self.control_keys['weapon_reset']]:
             self.rotate_weapon(self.tank_base.angle)
 
+    def check_collision_point(self, x, y):
+        print(self.collide_rect.collidepoint(x, y))
+        return self.collide_rect.collidepoint(x, y)
+
     def update(self):
         # self.image.fill((0, 255, 0, 255))
         self.image.fill((0, 0, 0, 0))
         keys = pygame.key.get_pressed()
-        collide_enemies = self.collide_rect.collidelist(self.enemies)
-        collide = self.collide_rect.collidelist(self.walls)
-        if collide == -1 and collide_enemies == -1:
-            self.previous_pos = (self.rect.centerx, self.rect.centery)
-            if keys[self.control_keys['w']]:
-                if self.get_rotate_collied_rect(90).collidelist(self.walls) == -1 and self.get_rotate_collied_rect(90).collidelist(self.enemies) == -1:
-                    self.rotate_base(90)
-                    self.rect.centery = self.rect.centery - 2
-            elif keys[self.control_keys['s']]:
-                if self.get_rotate_collied_rect(270).collidelist(self.walls) == -1 and self.get_rotate_collied_rect(270).collidelist(self.enemies) == -1:
-                    self.rotate_base(270)
-                    self.rect.centery = self.rect.centery + 2
-            elif keys[self.control_keys['a']]:
-                if self.get_rotate_collied_rect(180).collidelist(self.walls) == -1 and self.get_rotate_collied_rect(180).collidelist(self.enemies) == -1:
-                    self.rotate_base(180)
-                    self.rect.centerx = self.rect.centerx - 2
-            elif keys[self.control_keys['d']]:
-                if self.get_rotate_collied_rect(0).collidelist(self.walls) == -1 and self.get_rotate_collied_rect(0).collidelist(self.enemies) == -1:
-                    self.rotate_base(0)
-                    self.rect.centerx = self.rect.centerx + 2
-        else:
-            self.rect.center = self.previous_pos
+
+        self.previous_pos = self.collide_rect.center
+
+        if keys[self.control_keys['w']]:
+            if self.get_rotate_collied_rect(90).collidelist(self.walls) == -1 and self.get_rotate_collied_rect(
+                    90).collidelist(self.enemies) == -1:
+                self.rotate_base(90)
+                self.rect.centery = self.rect.centery - 2
+        elif keys[self.control_keys['s']]:
+            if self.get_rotate_collied_rect(270).collidelist(self.walls) == -1 and self.get_rotate_collied_rect(
+                    270).collidelist(self.enemies) == -1:
+                self.rotate_base(270)
+                self.rect.centery = self.rect.centery + 2
+        elif keys[self.control_keys['a']]:
+            if self.get_rotate_collied_rect(180).collidelist(self.walls) == -1 and self.get_rotate_collied_rect(
+                    180).collidelist(self.enemies) == -1:
+                self.rotate_base(180)
+                self.rect.centerx = self.rect.centerx - 2
+        elif keys[self.control_keys['d']]:
+            if self.get_rotate_collied_rect(0).collidelist(self.walls) == -1 and self.get_rotate_collied_rect(
+                    0).collidelist(self.enemies) == -1:
+                self.rotate_base(0)
+                self.rect.centerx = self.rect.centerx + 2
+
+        self.collide_rect.center = self.rect.center
+        # collision
+        if self.collide_rect.collidelist(self.walls) != -1 or self.collide_rect.collidelist(self.enemies) != -1:
+            self.collide_rect.center = self.previous_pos
+            self.rect.center = self.collide_rect.center
 
         self.image.blit(self.tank_base.image, self.tank_base.rect)
         self.tank_shell.move()
         self.image.blit(self.__tank_weapon.image, self.__tank_weapon.rect)
         self.show_fire_effect()
-        self.collide_rect.center = self.rect.center
 
     def show_fire_effect(self):
         fire_effect_pos = None

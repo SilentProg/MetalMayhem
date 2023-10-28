@@ -111,7 +111,7 @@ class Game:
                 single_tank1.update()
                 single_tank1.draw(self.screen)
                 # self.screen.blit(tank, (100, 100))
-                self.draw_grid()
+                # self.draw_grid()
 
             pygame.display.update()
             self.clock.tick(60)
