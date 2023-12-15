@@ -5,9 +5,9 @@ from modules.const import PATH, WASD_PLAYER, NUMBERS_PLAYER
 
 
 class TankWeapon:
-    def __init__(self) -> None:
+    def __init__(self, image) -> None:
         self.image = pygame.transform.rotozoom(
-            pygame.image.load(path_join(PATH, 'assets/images/tank_weapon.png')).convert_alpha(), 0, 0.6)
+            pygame.image.load(image).convert_alpha(), 0, 0.6)
         self.rect = self.image.get_rect()
         self.angle = 0
 
@@ -19,13 +19,12 @@ class TankWeapon:
 
 
 class TankBase:
-    def __init__(self) -> None:
+    def __init__(self, image) -> None:
         self.image = pygame.transform.rotozoom(
-            pygame.image.load(path_join(PATH, 'assets/images/tank_base.png')).convert_alpha(), 0, 0.6)
+            pygame.image.load(image).convert_alpha(), 0, 0.6)
         self.rect = self.image.get_rect()
         self.rect.move_ip(-50, 0)
         self.angle = 0
-        print(f'width = {self.image.get_width()} | height = {self.image.get_height()}')
 
     def rotate(self, angle):
         rotate = (360 - self.angle + angle)
@@ -44,6 +43,8 @@ class Shell:
         self.window = window
         self.speed = 20
         self.count = 0
+        self.damage = pygame.mixer.Sound(path_join(PATH, 'assets/sounds/damage.wav'))
+        self.is_damage = False
 
     def set_angle(self, angle, center):
         if self.direction != angle:
@@ -69,6 +70,7 @@ class Shell:
                 self.stop()
 
     def stop(self):
+        self.damage.play()
         self.count = 0
         self.rect.x = 100000
 
@@ -82,6 +84,8 @@ class FireEffect:
         self.direction = 0
         self.display_duration = 500
         self.image_visible = False
+        self.sound = pygame.mixer.Sound(path_join(PATH, 'assets/sounds/fire.wav'))
+        self.is_sound = False
 
     def show(self, window, angle, pos):
         if not self.image_visible: return
@@ -95,14 +99,21 @@ class FireEffect:
             self.rect.center = pos
             self.direction = angle
             window.blit(self.image, self.rect)
+            if not self.is_sound:
+                self.sound.play()
+                self.is_sound = True
             self.image_visible = True
         else:
+            self.is_sound = False
+            self.sound.stop()
             self.image_visible = False
             self.start_time = None
 
 
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, window: pygame.Surface, walls: [], pos=(200, 200), keys: {} = WASD_PLAYER) -> None:
+    def __init__(self, window: pygame.Surface, walls: [], pos=(200, 200), keys: {} = WASD_PLAYER,
+                 tank_base_image='tank_base.png',
+                 tank_weapon_image='tank_weapon.png') -> None:
         super().__init__()
         self.image = pygame.Surface((100, 100), pygame.SRCALPHA)
         self.rect = self.image.get_rect()
@@ -111,8 +122,8 @@ class Tank(pygame.sprite.Sprite):
         self.walls = walls
         self.window = window
         self.control_keys = keys
-        self.tank_base = TankBase()
-        self.__tank_weapon = TankWeapon()
+        self.tank_base = TankBase(path_join(PATH, f'assets/images/{tank_base_image}'))
+        self.__tank_weapon = TankWeapon(path_join(PATH, f'assets/images/{tank_weapon_image}'))
         self.collide_surface = pygame.Surface((self.tank_base.rect.width + 2, self.tank_base.rect.height + 2))
         self.collide_rect = self.collide_surface.get_rect()
         self.collide_rect.center = self.rect.center
@@ -141,7 +152,6 @@ class Tank(pygame.sprite.Sprite):
             angle = 0
         if angle == -90:
             angle = 270
-        print(angle)
         self.__tank_weapon.rotate(angle)
         self.__tank_weapon.rect.center = self.tank_base.rect.center
 
@@ -174,7 +184,6 @@ class Tank(pygame.sprite.Sprite):
             self.rotate_weapon(self.tank_base.angle)
 
     def check_collision_point(self, x, y):
-        print(self.collide_rect.collidepoint(x, y))
         return self.collide_rect.collidepoint(x, y)
 
     def update(self):

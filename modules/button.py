@@ -42,18 +42,16 @@ class Button(pygame.sprite.Sprite):
         relative_pos = (mouse_pos[0] - self.parent_pos[0], mouse_pos[1] - self.parent_pos[1])
 
         if self.rect.collidepoint(relative_pos):
-            # pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
             self.image = self.hover_image
             self.check_if_click(relative_pos)
         else:
-            # pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
             self.image = self.original_image
 
     def check_if_click(self, pos):
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] and self.pressed == 1:
-                self.command()
-                pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
-                self.pressed = 0
             if pygame.mouse.get_pressed() == (0, 0, 0):
                 self.pressed = 1
+            if pygame.mouse.get_pressed()[0] and self.pressed == 1:
+                self.command()
+                self.pressed = 0
+

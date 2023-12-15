@@ -1,34 +1,47 @@
 import os
-
+import configparser
 import pygame
 
 PATH = os.path.abspath(__file__ + '/../..')
-# WIDTH = 1920
-# HEIGHT = 1080
-WIDTH = 1400
-HEIGHT = 800
-COLS = 28
-ROWS = 16
+
+config_path = os.path.join(PATH, 'config.ini')
+
+config = configparser.ConfigParser()
+
+if not os.path.exists(config_path):
+    from modules.config_writer import write_config
+    write_config(config_path)
+
+config.read(config_path)
+
+WIDTH = int(config.get('SCREEN', 'WIDTH'))
+HEIGHT = int(config.get('SCREEN', 'HEIGHT'))
+COLS = int(config.get('SCREEN', 'COLS'))
+ROWS = int(config.get('SCREEN', 'ROWS'))
+
 SCREEN_SIZE = (WIDTH, HEIGHT)
 STEP = HEIGHT // ROWS
 WASD_PLAYER = {
-    'weapon_rotate_r': pygame.K_e,
-    'weapon_rotate_l': pygame.K_q,
-    'w': pygame.K_w,
-    'a': pygame.K_a,
-    's': pygame.K_s,
-    'd': pygame.K_d,
-    'weapon_fire': pygame.K_SPACE,
-    'weapon_reset': pygame.K_c
+    'weapon_rotate_r': int(config.get('WASD_PLAYER', 'weapon_rotate_r')),
+    'weapon_rotate_l': int(config.get('WASD_PLAYER', 'weapon_rotate_l')),
+    'w': int(config.get('WASD_PLAYER', 'w')),
+    'a': int(config.get('WASD_PLAYER', 'a')),
+    's': int(config.get('WASD_PLAYER', 's')),
+    'd': int(config.get('WASD_PLAYER', 'd')),
+    'weapon_fire': int(config.get('WASD_PLAYER', 'weapon_fire')),
+    'weapon_reset': int(config.get('WASD_PLAYER', 'weapon_reset'))
 }
 
 NUMBERS_PLAYER = {
-    'weapon_rotate_r': pygame.K_o,
-    'weapon_rotate_l': pygame.K_u,
-    'w': pygame.K_i,
-    'a': pygame.K_j,
-    's': pygame.K_k,
-    'd': pygame.K_l,
-    'weapon_fire': pygame.K_SLASH,
-    'weapon_reset': pygame.K_BACKSLASH
+    'weapon_rotate_r': int(config.get('NUMBERS_PLAYER', 'weapon_rotate_r')),
+    'weapon_rotate_l': int(config.get('NUMBERS_PLAYER', 'weapon_rotate_l')),
+    'w': int(config.get('NUMBERS_PLAYER', 'w')),
+    'a': int(config.get('NUMBERS_PLAYER', 'a')),
+    's': int(config.get('NUMBERS_PLAYER', 's')),
+    'd': int(config.get('NUMBERS_PLAYER', 'd')),
+    'weapon_fire': int(config.get('NUMBERS_PLAYER', 'weapon_fire')),
+    'weapon_reset': int(config.get('NUMBERS_PLAYER', 'weapon_reset'))
 }
+
+print(WASD_PLAYER)
+print(NUMBERS_PLAYER)
