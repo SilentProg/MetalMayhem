@@ -4,7 +4,6 @@ import numpy as np
 
 from modules.const import STEP, PATH
 
-
 class Block(pygame.Rect):
     def __init__(self, x, y, window, type_block, image):
         super().__init__(x, y, STEP, STEP)
@@ -36,8 +35,11 @@ if not os.path.exists(map_file):
         [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2],
         [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2],
         [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]])
-    # 0 - Пустий блок2# 1 - Блок який можна зруйнувати
+
+    # 0 - Пустий блок
+    # 1 - Блок який можна зруйнувати
     # 2 - Блок який неможливо зруйнувати
+
     np.savetxt(map_file, matrix, fmt='%d', delimiter=', ')
 
 map = np.loadtxt(map_file, dtype=int, delimiter=',')
